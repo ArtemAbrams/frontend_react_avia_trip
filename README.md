@@ -2,6 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+P.S чомусь зламався минулий проджект і не міг пишити на вітку, намагався переініціалізувати гіт,
+але чогось не виходило прийшлося створити новий проект та запушити його заново
+
 ## Available Scripts
 
 In the project directory, you can run:
