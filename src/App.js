@@ -24,7 +24,7 @@ function App() {
     const auth = useAuth();
     const roles = auth.roles;
     const isAdmin = roles.some(role => role === 'Admin');
-    return isAdmin;
+    return isAdmin ? children : null;
   }
   return (
       <div className="App">
