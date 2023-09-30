@@ -20,6 +20,12 @@ function App() {
     }
     return <Navigate to="/" />
   }
+  function Role({children}){
+    const auth = useAuth();
+    const roles = auth.roles;
+    const isAdmin = roles.some(role => role === 'Admin');
+    return isAdmin;
+  }
   return (
       <div className="App">
         <AuthProvider>
@@ -36,17 +42,21 @@ function App() {
               }></Route>
               <Route path='/countries/' element={
                 <AuthenticatedRoute>
-                  <Countries />
+                    <Countries />
                 </AuthenticatedRoute>
               }></Route>
               <Route path='/createCountry/' element={
                 <AuthenticatedRoute>
-                  <CreateCountry />
+                  <Role>
+                     <CreateCountry />
+                  </Role>
                 </AuthenticatedRoute>
               }></Route>
               <Route path='/update/:id' element={
                 <AuthenticatedRoute>
-                  <CountryComponent />
+                  <Role>
+                     <CountryComponent />
+                  </Role>
                 </AuthenticatedRoute>
               }></Route>
               <Route path='/logout' element={

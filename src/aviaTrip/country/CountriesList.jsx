@@ -3,12 +3,15 @@ import {countryToDelete} from "../uriRequest/URlCountryController";
 import {useNavigate} from "react-router-dom";
 import {apiClient} from "../uriRequest/apiClient";
 import {useEffect, useState} from "react";
+import {useAuth} from "../security/context/AuthContext";
 
 
 export default function Countries(){
     const [countries, setCountries] = useState([]);
     const [errorMessage, setErrorMessage] = useState(null);
     const navigate = useNavigate();
+    const auth = useAuth();
+    const isAdmin = auth.roles.some(role => role === 'Admin');
     useEffect(
         () => getCountries()
     )
@@ -52,15 +55,16 @@ export default function Countries(){
         <div>
             {errorMessage && <div className="error-message"> {errorMessage} </div>}
             {deleteCountryErrorMessage && <div className="error-message"> {deleteCountryErrorMessage} </div>}
-            <button className="btn btn-success m-4" onClick={() => Create()}> Create </button>
+            {isAdmin &&
+                <button className="btn btn-success m-4" onClick={() => Create()}> Create </button>}
         <div className="card-list">
             {countries.map((e) => (
                 <div className="card" key={e.id}>
                     <p>Name: {e.name}</p>
                     <img src={"data:image/jpeg;base64," + e.file} alt="image.png" />
                     <div>
-                        <button className="btn btn-warning m-4" onClick={() => Delete(e.id)}> Delete </button>
-                        <button className="btn btn-success m-4" onClick={() =>Update(e.id)}> Update </button>
+                        {isAdmin && <button className="btn btn-warning m-4" onClick={() => Delete(e.id)}> Delete </button>}
+                        {isAdmin &&  <button className="btn btn-success m-4" onClick={() =>Update(e.id)}> Update </button>}
                     </div>
                 </div>
             ))}

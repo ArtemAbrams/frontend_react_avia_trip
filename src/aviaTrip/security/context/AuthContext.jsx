@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import {loginController} from "../../uriRequest/URlCountryController";
 import Interceptor from "../authenticationcomponent/interceptorRequest";
 export const AuthContext = createContext();
@@ -9,6 +9,10 @@ export default function AuthProvider({ children }) {
     const [isAuthenticated, setAuthenticated] = useState(false);
     const [username, setUsername] = useState('');
     const [token, setToken] = useState('');
+    const [roles, setRoles] = useState(null);
+    useEffect(() => {
+        console.log(roles)
+    }, [roles]);
     async function login(username, password) {
         const loginData = {
             email: username,
@@ -20,7 +24,7 @@ export default function AuthProvider({ children }) {
             if(response.status===200){
                 setAuthenticated(true);
                 setUsername(username);
-                console.log(a)
+                setRoles(response.data.roleDTOList);
                 Interceptor(a);
                 return true;
             }
@@ -45,7 +49,12 @@ export default function AuthProvider({ children }) {
         Interceptor(null);
     }
     return(
-      <AuthContext.Provider value={ { isAuthenticated, setAuthenticated, login, logout, username} }>
+      <AuthContext.Provider value={ { isAuthenticated,
+          setAuthenticated,
+          login,
+          logout,
+          username,
+          roles} }>
           {children}
       </AuthContext.Provider>
     )
